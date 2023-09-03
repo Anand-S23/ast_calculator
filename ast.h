@@ -12,25 +12,32 @@ typedef enum Token_Type
     TOKEN_TYPE_number,
     TOKEN_TYPE_lparen,
     TOKEN_TYPE_rparen,
-    TOKEN_TYPE_add,
-    TOKEN_TYPE_subtract,
-    TOKEN_TYPE_multiply,
-    TOKEN_TYPE_divide
+    TOKEN_TYPE_plus,
+    TOKEN_TYPE_minus,
+    TOKEN_TYPE_asterisk,
+    TOKEN_TYPE_slash,
+    TOKEN_TYPE_ast
 } Token_Type;
 
 typedef struct Token
 {
     Token_Type type;
-    int val; // Only for number
+    union
+    {
+        struct AST *node;
+        int val; // Only for number
+    };
 } Token;
+
 
 typedef enum AST_TYPE
 {
     AST_TYPE_main, 
-    AST_TYPE_number, 
-    AST_TYPE_add, 
-    AST_TYPE_subtract, 
-    AST_TYPE_multiply, 
+    AST_TYPE_negative,
+    AST_TYPE_number,
+    AST_TYPE_add,
+    AST_TYPE_subtract,
+    AST_TYPE_multiply,
     AST_TYPE_divide
 } AST_Type;
 
@@ -40,16 +47,16 @@ typedef struct AST
     union
     {
         struct AST *body;
-        int number;
 
         struct
         {
             struct AST *left;
             struct AST *right;
-        } op;
-    } data;
-} AST;
+        };
 
+        int val;
+    };
+} AST;
 
 // Function Decl // 
 
